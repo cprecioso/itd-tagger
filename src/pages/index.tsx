@@ -1,39 +1,68 @@
 import React, { FunctionComponent } from "react"
+import { FormProvider, useForm, useFormContext } from "react-hook-form"
+import useSWR from "swr"
+import { CardData } from "../card-data"
+import { ActionsPanel, IndexBox } from "../components/ActionsPanel"
 import FormContents from "../components/Form"
-import { Indications, IndicationsProvider } from "../hooks/indications"
+import { useDB } from "../hooks/db"
+import { DisableProvider } from "../hooks/disable"
+import { IndicationsProvider, useIndication } from "../hooks/indications"
+import {
+  SelectedDocumentProvider,
+  useSelectedDocument,
+} from "../hooks/selected-document"
 
-const ActionsPanel: FunctionComponent = () => (
-  <div className="actions">
-    <style jsx>{`
-      .actions {
-        display: flex;
-        flex-flow: column nowrap;
-        padding-top: 1em;
-      }
+const IndexPage = () => {
+  const methods = useForm<CardData>()
 
-      .actions > * {
-        width: 200px;
-        margin: 0.1em 0.5em;
-      }
+  return (
+    <IndicationsProvider>
+      <FormProvider {...methods}>
+        <SelectedDocumentProvider>
+          <AppPanels />
+        </SelectedDocumentProvider>
+      </FormProvider>
+    </IndicationsProvider>
+  )
+}
 
-      hr {
-        border: 0;
-        padding: 0.5em 0;
-      }
-    `}</style>
-    <button>Previous [j]</button>
-    <button>Next [k]</button>
-    <hr />
-    <button>Save [enter]</button>
-    <button>Export</button>
-    <hr />
-    <Indications />
-  </div>
-)
+export default IndexPage
 
-const IndexPage = () => (
-  <IndicationsProvider>
-    <div className="split-panel">
+const AppPanels: FunctionComponent = () => {
+  const { currentIndex, save } = useSelectedDocument()
+
+  const db = useDB()
+  const key = currentIndex != null ? "" + currentIndex : null
+  const { data, error, isValidating } = useSWR(
+    key,
+    (id) => db.get<CardData>(id),
+    { revalidateOnFocus: false, revalidateOnReconnect: false }
+  )
+
+  const canEdit = key != null && !error && !isValidating
+
+  useIndication("Refreshing content...", isValidating)
+
+  const { reset } = useFormContext()
+
+  React.useEffect(() => {
+    if (data && canEdit) {
+      reset({
+        heading: { enabled: true },
+        image: { enabled: true },
+        context_learning: [
+          { enabled: true },
+          { enabled: true },
+          { enabled: true },
+        ],
+        design_learning: { enabled: true },
+        ...data,
+      })
+    }
+  }, [data, canEdit])
+
+  return (
+    <form className="split-panel" onSubmit={save}>
       <style jsx>{`
         .split-panel {
           display: flex;
@@ -45,18 +74,27 @@ const IndexPage = () => (
           height: 100vh;
           width: 70vh;
           pointer-events: none;
+          flex: auto 0 0;
         }
       `}</style>
 
-      <iframe src="/static/star.pdf" tabIndex={-1} />
+      <iframe src={data?.url} tabIndex={-1} />
 
       <div>
-        <FormContents />
+        {error ? (
+          <>
+            <p>Error</p>
+            <pre>{"" + error}</pre>
+          </>
+        ) : null}
+        <DisableProvider disable={!canEdit}>
+          <FormContents />
+        </DisableProvider>
       </div>
 
       <ActionsPanel />
-    </div>
-  </IndicationsProvider>
-)
 
-export default IndexPage
+      <IndexBox />
+    </form>
+  )
+}

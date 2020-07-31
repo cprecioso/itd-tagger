@@ -17,7 +17,9 @@ export const DisableProvider: FunctionComponent<{ disable?: boolean }> = ({
           flex-flow: column nowrap;
         }
       `}</style>
-      <div style={{ opacity: disable ? "0.3" : "1" }}>{children}</div>
+      <div style={{ opacity: disable && !parentDisable ? "0.3" : "1" }}>
+        {children}
+      </div>
     </DisableContext.Provider>
   )
 }

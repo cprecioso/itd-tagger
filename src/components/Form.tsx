@@ -1,67 +1,104 @@
 import React, { FunctionComponent } from "react"
+import { useFormContext } from "react-hook-form"
 import { DisableProvider } from "../hooks/disable"
 import { useIndication } from "../hooks/indications"
-import {
-  Checkbox,
-  CheckboxSet,
-  Fieldset,
-  Group,
-  RadioSet,
-  Scale,
-} from "./controls"
+import { Checkbox, CheckboxSet } from "./controls/Checkbox"
+import { Date } from "./controls/Date"
+import { Fieldset } from "./controls/Fieldset"
+import { Group } from "./controls/Group"
+import { RadioSet } from "./controls/Radio"
+import { Scale } from "./controls/Scale"
+import { Text } from "./controls/Text"
 
 const ContextLearning: FunctionComponent<{ i: number }> = ({ i }) => {
-  const [enabledParts, setEnabledParts] = React.useState({
-    knowledge: false,
-    type: true,
-    focus: true,
-  })
+  const { watch } = useFormContext()
 
   return (
-    <Fieldset togglable legend={`Context learning ${i}`}>
+    <Fieldset
+      togglable
+      name={`context_learning[${i - 1}].enabled`}
+      legend={`Context learning ${i}`}
+    >
       <RadioSet
+        name={`context_learning[${i - 1}].type`}
         options={["process description", "design description", "knowledge"]}
-        onChange={(v) =>
-          setEnabledParts((old) => ({ ...old, knowledge: v === "knowledge" }))
-        }
       />
-      <DisableProvider disable={!enabledParts.knowledge}>
+      <DisableProvider
+        disable={watch(`context_learning[${i - 1}].type`) !== "knowledge"}
+      >
         <Group label="Knowledge type indication">
           <Checkbox
+            name={`context_learning[${i - 1}].knowledge.type.correct`}
             label="correct"
-            onChange={(v) => setEnabledParts((old) => ({ ...old, type: !v }))}
           />
-          <DisableProvider disable={!enabledParts.type}>
-            <RadioSet options={["insight", "idea", "know-how"]} />
+          <DisableProvider
+            disable={
+              !watch(`context_learning[${i - 1}].knowledge.type.correct`)
+            }
+          >
+            <RadioSet
+              name={`context_learning[${i - 1}].knowledge.type.actual`}
+              options={["insight", "idea", "know-how"]}
+            />
           </DisableProvider>
         </Group>
         <Group label="Knowledge focus indication">
           <Checkbox
+            name={`context_learning[${i - 1}].knowledge.focus.correct`}
             label="correct"
-            onChange={(v) => setEnabledParts((old) => ({ ...old, focus: !v }))}
           />
-          <DisableProvider disable={!enabledParts.focus}>
-            <CheckboxSet options={["people", "technology", "organisation"]} />
+          <DisableProvider
+            disable={
+              !watch(`context_learning[${i - 1}].knowledge.focus.correct`)
+            }
+          >
+            <CheckboxSet
+              name={`context_learning[${i - 1}].knowledge.focus.actual`}
+              options={["people", "technology", "organisation"]}
+            />
           </DisableProvider>
         </Group>
         <Group>
-          <Scale label={["superficial", "thought-through"]} />
-          <Scale label={["project-oriented", "self-oriented"]} />
-          <Scale label={["case-specific", "universal"]} />
+          <Scale
+            name={`context_learning[${i - 1}].knowledge.depth`}
+            label={["superficial", "thought-through"]}
+          />
+          <Scale
+            name={`context_learning[${
+              i - 1
+            }].knowledge.project_or_self_oriented`}
+            label={["project-oriented", "self-oriented"]}
+          />
+          <Scale
+            name={`context_learning[${i - 1}].knowledge.universality`}
+            label={["case-specific", "universal"]}
+          />
         </Group>
       </DisableProvider>
-      <Checkbox label="special" />
+      <Checkbox name={`context_learning[${i - 1}].special`} label="special" />
     </Fieldset>
   )
 }
 
-const FormContents: FunctionComponent = () => {
-  useIndication("[tab] and [shift+tab] to change to between fields", true)
+const CardMeta: FunctionComponent = () => {
+  return (
+    <Fieldset legend="Card data" togglable={false}>
+      <Date name="metadata.date" label="Date" />
+      <Text name="metadata.student_name" label="Student name" />
+      <Text name="metadata.group_number" label="Group number" />
+    </Fieldset>
+  )
+}
+
+const FormContents: FunctionComponent<{}> = () => {
+  useIndication("[tab] and [shift+tab] to change between fields")
+
+  const { watch } = useFormContext()
 
   return (
-    <form>
+    <div className="form">
       <style jsx>{`
-        form {
+        .form {
           display: flex;
           flex-flow: column nowrap;
 
@@ -71,71 +108,101 @@ const FormContents: FunctionComponent = () => {
           overflow-y: scroll;
         }
       `}</style>
-      <Fieldset legend="Heading">
-        <Group>
-          <RadioSet
-            options={[
-              "describes interaction with the protoype",
-              "describes the design",
-              "describes the process",
-              "other",
-            ]}
-          />
-        </Group>
-        <Checkbox label="special (wow! e.g. a nice quote)" />
+
+      <Fieldset legend="In progress" togglable={false}>
+        <Checkbox
+          refocus
+          label="Mark card as in progress"
+          name="status.in_progress"
+        />
       </Fieldset>
 
-      <Fieldset legend="Image">
-        <Group label="Medium">
-          <CheckboxSet
-            options={[
-              "photo",
-              "sketch",
-              "3d game",
-              "photoshopped image",
-              "collage of multiple elements",
-              "other",
-            ]}
+      <DisableProvider disable={!watch("status.in_progress")}>
+        <Fieldset legend="Heading" name="heading.enabled">
+          <Group>
+            <RadioSet
+              name="heading.type"
+              options={[
+                "describes interaction with the protoype",
+                "describes the design",
+                "describes the process",
+                "other",
+              ]}
+            />
+          </Group>
+          <Checkbox
+            name="heading.special"
+            label="special (wow! e.g. a nice quote)"
           />
-        </Group>
-        <Group label="Depiction">
-          <CheckboxSet
-            options={[
-              "product",
-              "context",
-              "person/people",
-              "hands",
-              "face",
-              "screen interface",
-              "tangible interface",
-              "low fidelity",
-              "high fidelity",
-            ]}
-          />
-        </Group>
-        <Checkbox label="special" />
-      </Fieldset>
+        </Fieldset>
 
-      <ContextLearning i={1} />
-      <ContextLearning i={2} />
-      <ContextLearning i={3} />
+        <Fieldset name="image.enabled" legend="Image">
+          <Group label="Medium">
+            <CheckboxSet
+              name="image.medium"
+              options={[
+                "photo",
+                "sketch",
+                "3d game",
+                "photoshopped image",
+                "collage of multiple elements",
+                "other",
+              ]}
+            />
+          </Group>
+          <Group label="Depiction">
+            <CheckboxSet
+              name="image.depiction"
+              options={[
+                "product",
+                "context",
+                "person/people",
+                "hands",
+                "face",
+                "screen interface",
+                "tangible interface",
+                "low fidelity",
+                "high fidelity",
+              ]}
+            />
+          </Group>
+          <Checkbox name="image.special" label="special" />
+        </Fieldset>
 
-      <Fieldset legend="Knowledge gained about designing">
-        <Group>
-          <RadioSet
-            options={[
-              "process description",
-              "personal insight",
-              "teamwork insight",
-            ]}
-          />
-        </Group>
-        <Group>
-          <Scale label={["going bad", "going well"]} />
-        </Group>
-        <Checkbox label="special" />
-      </Fieldset>
-    </form>
+        <ContextLearning i={1} />
+        <ContextLearning i={2} />
+        <ContextLearning i={3} />
+
+        <Fieldset
+          name="design_learning.enabled"
+          legend="Knowledge gained about designing"
+        >
+          <Group>
+            <RadioSet
+              name="design_learning.type"
+              options={[
+                "process description",
+                "personal insight",
+                "teamwork insight",
+              ]}
+            />
+          </Group>
+          <Group>
+            <Scale
+              name="design_learning.progress"
+              label={["going bad", "going well"]}
+            />
+          </Group>
+          <Checkbox name="design_learning.special" label="special" />
+        </Fieldset>
+
+        <CardMeta />
+
+        <Fieldset legend="Completed" togglable={false}>
+          <Checkbox label="Mark card as processed" name="status.completed" />
+        </Fieldset>
+      </DisableProvider>
+    </div>
   )
 }
 

@@ -22,6 +22,10 @@ export const useIndication = (text: string, when = true) => {
   const ctx = React.useContext(IndicationsContext)
 
   React.useEffect(() => {
+    ctx?.setState((old) => ({ ...old, [text]: old[text] ?? 0 }))
+  }, [])
+
+  React.useEffect(() => {
     if (when) {
       ctx?.setState((old) => ({ ...old, [text]: (old[text] || 0) + 1 }))
       return () =>

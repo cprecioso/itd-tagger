@@ -1,17 +1,11 @@
 import { AppProps } from "next/app"
-import Head from "next/head"
 import React, { FunctionComponent } from "react"
 import { DBProvider } from "../hooks/db"
+import { GlobalActionsProvider } from "../hooks/global-actions"
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <style jsx global>{`
         body {
           margin: 0;
@@ -25,7 +19,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         }
         body,
         button {
-          font-family: "Fira Code", monospace;
+          font-family: sans-serif;
         }
 
         input:focus {
@@ -33,9 +27,11 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         }
       `}</style>
 
-      <DBProvider>
-        <Component {...pageProps} />
-      </DBProvider>
+      <GlobalActionsProvider>
+        <DBProvider>
+          <Component {...pageProps} />
+        </DBProvider>
+      </GlobalActionsProvider>
     </>
   )
 }

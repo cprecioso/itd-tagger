@@ -1,5 +1,6 @@
 import PouchDB from "pouchdb"
 import React, { FunctionComponent } from "react"
+import useSWR, { mutate } from "swr"
 import { useSimplePromise } from "./promise"
 
 export type DB = PouchDB.Database<{}>
@@ -7,8 +8,13 @@ export type DB = PouchDB.Database<{}>
 const createDb = async (remoteUrl: string | undefined) => {
   if (!remoteUrl) throw new Error("No remote db")
   const db = new PouchDB("local")
-  await db.replicate.from(remoteUrl)
+  await db.sync(remoteUrl)
   db.sync(remoteUrl, { live: true, retry: true })
+
+  try {
+    Object.assign(window, { db })
+  } catch {}
+
   return db
 }
 
@@ -40,3 +46,12 @@ export const useDB = () => {
   if (!db) throw new Error("No dbprovider")
   return db
 }
+
+export const useCardStatus = () => {
+  const db = useDB()
+  return useSWR("card-queries/card-status", db.query.bind(db), {
+    refreshInterval: 10000,
+  })
+}
+
+export const updateCardStatus = () => mutate("card-queries/card-status")
