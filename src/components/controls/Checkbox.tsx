@@ -1,3 +1,4 @@
+import { useId } from "@react-aria/utils"
 import React, { FunctionComponent } from "react"
 import { useFormContext } from "react-hook-form"
 import { useDisabled } from "../../hooks/disable"
@@ -18,23 +19,20 @@ export const Checkbox: FunctionComponent<{
   const isDisabled = useDisabled()
   const { register, setValue } = useFormContext()
 
-  const [ref, setRef] = React.useState<HTMLInputElement | null>(null)
-  const _setRef = register()
-  React.useEffect(() => {
-    _setRef(ref)
-  }, [ref])
+  const elementId = useId()
 
   const { currentIndex } = useSelectedDocument()
   React.useEffect(() => {
-    if (refocus && !isDisabled) ref?.focus()
-  }, [refocus, currentIndex, ref, isDisabled])
+    if (refocus && !isDisabled) document.getElementById(elementId)?.focus()
+  }, [refocus, currentIndex, isDisabled])
 
   return (
     <Label>
       <input
+        id={elementId}
         type="checkbox"
         name={name}
-        ref={setRef}
+        ref={register()}
         value={value}
         disabled={isDisabled}
         onFocus={() => setIsFocused(true)}
