@@ -6,7 +6,6 @@ import { Checkbox } from "./Checkbox"
 export const Fieldset: FunctionComponent<{
   legend: string
   togglable?: boolean
-
   name?: string
 }> = ({ legend, children, togglable = true, name }) => {
   const { watch } = useFormContext()
@@ -25,7 +24,7 @@ export const Fieldset: FunctionComponent<{
         }
       `}</style>
       <legend>
-        {togglable ? <Checkbox name={name} label={legend} /> : legend}
+        {togglable && name ? <Checkbox name={name} label={legend} /> : legend}
       </legend>
       <DisableProvider disable={name ? !watch(name) : false}>
         {children}
