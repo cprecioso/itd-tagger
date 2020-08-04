@@ -32,9 +32,7 @@ const ContextLearning: FunctionComponent<{ i: number }> = ({ i }) => {
             label="correct"
           />
           <DisableProvider
-            disable={
-              !watch(`context_learning[${i - 1}].knowledge.type.correct`)
-            }
+            disable={watch(`context_learning[${i - 1}].knowledge.type.correct`)}
           >
             <RadioSet
               name={`context_learning[${i - 1}].knowledge.type.actual`}
@@ -48,9 +46,9 @@ const ContextLearning: FunctionComponent<{ i: number }> = ({ i }) => {
             label="correct"
           />
           <DisableProvider
-            disable={
-              !watch(`context_learning[${i - 1}].knowledge.focus.correct`)
-            }
+            disable={watch(
+              `context_learning[${i - 1}].knowledge.focus.correct`
+            )}
           >
             <CheckboxSet
               name={`context_learning[${i - 1}].knowledge.focus.actual`}
