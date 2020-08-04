@@ -1,7 +1,5 @@
 import { AppProps } from "next/app"
 import React, { FunctionComponent } from "react"
-import { DBProvider } from "../hooks/db"
-import { GlobalActionsProvider } from "../hooks/global-actions"
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
@@ -27,11 +25,7 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         }
       `}</style>
 
-      <GlobalActionsProvider>
-        <DBProvider>
-          <Component {...pageProps} />
-        </DBProvider>
-      </GlobalActionsProvider>
+      <Component {...pageProps} />
     </>
   )
 }
