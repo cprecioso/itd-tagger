@@ -139,10 +139,10 @@ export const ActionsPanel: FunctionComponent = () => {
         }
       `}</style>
 
+      <button type="submit">Save [enter]</button>
+      <hr />
       <button onClick={() => goToPrevious()}>Previous [j]</button>
       <button onClick={() => goToNext()}>Next [k]</button>
-      <hr />
-      <button type="submit">Save [enter]</button>
       <hr />
       <Indications />
     </div>

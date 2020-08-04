@@ -17,8 +17,6 @@ const SelectedDocumentContext = React.createContext<SelectedDocumentContext | nu
   null
 )
 
-const submit = () => document.forms[0].dispatchEvent(new Event("submit"))
-
 export const SelectedDocumentProvider: FunctionComponent = ({ children }) => {
   const [state, setState] = React.useState<SelectedDocumentState>({
     currentIndex: null,
