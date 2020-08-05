@@ -8,7 +8,7 @@ export type DB = PouchDB.Database<{}>
 
 const createDb = async (localName: string, remoteUrl: string | undefined) => {
   if (!remoteUrl) throw new Error("No remote db")
-  const db = new PouchDB("local-" + localName)
+  const db = new PouchDB("local-2-" + localName)
   await db.sync(remoteUrl)
   db.sync(remoteUrl, { live: true, retry: true })
 
