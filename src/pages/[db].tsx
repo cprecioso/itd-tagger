@@ -78,7 +78,6 @@ const AppPanels: FunctionComponent = () => {
           border: 0;
           height: 100vh;
           width: 70vh;
-          pointer-events: none;
           flex: auto 0 0;
         }
       `}</style>
