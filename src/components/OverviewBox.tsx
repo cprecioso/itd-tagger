@@ -3,13 +3,11 @@ import zip from "lodash.zip"
 import PouchDB from "pouchdb"
 import React, { FunctionComponent } from "react"
 import useSWR from "swr"
+import { useSecrets } from "../hooks/secret"
 
-export const fetcher = async () => {
+export const fetcher = async (caisUrl: string, oscarUrl: string) => {
   const [cais, oscar] = await Promise.all(
-    [
-      process.env.NEXT_PUBLIC_REMOTE_DB_URL_CAIS,
-      process.env.NEXT_PUBLIC_REMOTE_DB_URL_OSCAR,
-    ].map(async (dbUrl) =>
+    [caisUrl, oscarUrl].map(async (dbUrl) =>
       sortBy(
         (await new PouchDB(dbUrl).query("card-queries/card-status")).rows,
         (row) => row.id
@@ -25,7 +23,10 @@ export const PADDING = 2
 export const COLUMNS = 50
 
 export const OverviewBox: FunctionComponent = () => {
-  const { data } = useSWR("overview", fetcher, { refreshInterval: 5000 })
+  const secrets = useSecrets()
+  const { data } = useSWR([secrets.cais, secrets.oscar], fetcher, {
+    refreshInterval: 5000,
+  })
 
   const rows = Math.ceil((data?.length ?? 0) / COLUMNS)
 

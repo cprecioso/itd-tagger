@@ -1,5 +1,6 @@
 import { AppProps } from "next/app"
 import React, { FunctionComponent } from "react"
+import { SecretProvider } from "../hooks/secret"
 
 const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
@@ -25,7 +26,9 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
         }
       `}</style>
 
-      <Component {...pageProps} />
+      <SecretProvider>
+        <Component {...pageProps} />
+      </SecretProvider>
     </>
   )
 }

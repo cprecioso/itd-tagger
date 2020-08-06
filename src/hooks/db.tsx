@@ -3,6 +3,7 @@ import PouchDB from "pouchdb"
 import React, { FunctionComponent } from "react"
 import useSWR, { mutate } from "swr"
 import { useSimplePromise } from "./promise"
+import { useSecrets } from "./secret"
 
 export type DB = PouchDB.Database<{}>
 
@@ -22,14 +23,11 @@ const createDb = async (localName: string, remoteUrl: string | undefined) => {
 const DBContext = React.createContext<DB | null>(null)
 DBContext.displayName = "DBContext"
 
-const urls = {
-  cais: process.env.NEXT_PUBLIC_REMOTE_DB_URL_CAIS,
-  oscar: process.env.NEXT_PUBLIC_REMOTE_DB_URL_OSCAR,
-}
-
 export const DBProvider: FunctionComponent = ({ children }) => {
   const router = useRouter()
   const dbName = router.query.db as "cais" | "oscar"
+
+  const urls = useSecrets()
 
   const { error, value: db } = useSimplePromise(
     () => createDb(dbName, urls[dbName]),

@@ -9,7 +9,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.2.0",
-    "swr": "^0.3.0"
+    "swr": "^0.3.0",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@types/lodash.sortby": "^4",
