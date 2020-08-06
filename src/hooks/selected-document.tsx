@@ -27,7 +27,7 @@ export const SelectedDocumentProvider: FunctionComponent = ({ children }) => {
 
   const ctx = React.useMemo<SelectedDocumentContext>(() => {
     const save = handleSubmit(async (formData) => {
-      if (!state.currentIndex) return
+      if (state.currentIndex == null) return
       const docId = "" + state.currentIndex
       const data = await db.get(docId)
       const newData = { ...data, ...formData }
