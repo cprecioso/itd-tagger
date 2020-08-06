@@ -3,6 +3,7 @@
   "dependencies": {
     "@react-aria/utils": "^3.1.0",
     "lodash.sortby": "^4.7.0",
+    "lodash.zip": "^4.2.0",
     "next": "^9.5.0",
     "pouchdb": "^7.2.2",
     "react": "^16.13.1",
@@ -11,22 +12,19 @@
     "swr": "^0.3.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9",
-    "@types/lodash": "^4",
     "@types/lodash.sortby": "^4",
+    "@types/lodash.zip": "^4.2.6",
     "@types/node": "^14.0.27",
     "@types/pouchdb": "^6.4.0",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
-    "dotenv": "^8.2.0",
     "fs-extra": "^9.0.1",
     "get-stream": "^5.1.0",
-    "globby": "^11.0.1",
     "lodash": "^4.17.19",
     "p-queue": "^6.6.0",
-    "pouchdb-adapter-memory": "^7.2.2",
     "prettier": "^2.0.5",
     "styled-jsx": "^3.3.0",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "unzipper": "^0.10.11"
   }
 }
