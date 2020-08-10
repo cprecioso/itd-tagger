@@ -10,7 +10,7 @@ export const fetcher = async (caisUrl: string, oscarUrl: string) => {
     [caisUrl, oscarUrl].map(async (dbUrl) =>
       sortBy(
         (await new PouchDB(dbUrl).query("card-queries/card-status")).rows,
-        (row) => row.id
+        (row) => Number.parseInt(row.id, 10)
       )
     )
   )
