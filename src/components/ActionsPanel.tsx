@@ -87,6 +87,7 @@ export const IndexBox: FunctionComponent = () => {
               }`}
               key={row.id}
               data-index={row.id}
+              title={`Card #${row.id}`}
             />
           ))}
         </div>

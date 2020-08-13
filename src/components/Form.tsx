@@ -82,7 +82,6 @@ const FormContents: FunctionComponent<{}> = () => {
   useIndication("[tab] and [shift+tab] to change between fields")
   const { watch, register } = useFormContext()
 
-
   return (
     <div className="form">
       <style jsx>{`
@@ -200,7 +199,10 @@ const FormContents: FunctionComponent<{}> = () => {
       </DisableProvider>
 
       <Fieldset legend="Special" togglable={false}>
+        Notes
+        <br />
         <textarea name="notes" ref={register()} />
+        <hr />
         <Checkbox label="Mark card as not applicable" name="status.deleted" />
       </Fieldset>
     </div>
