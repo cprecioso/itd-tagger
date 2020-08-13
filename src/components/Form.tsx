@@ -78,20 +78,10 @@ const ContextLearning: FunctionComponent<{ i: number }> = ({ i }) => {
   )
 }
 
-const CardMeta: FunctionComponent = () => {
-  return (
-    <Fieldset legend="Card data" togglable={false}>
-      <Date name="metadata.date" label="Date" />
-      <Text name="metadata.student_name" label="Student name" />
-      <Text name="metadata.group_number" label="Group number" />
-    </Fieldset>
-  )
-}
-
 const FormContents: FunctionComponent<{}> = () => {
   useIndication("[tab] and [shift+tab] to change between fields")
+  const { watch, register } = useFormContext()
 
-  const { watch } = useFormContext()
 
   return (
     <div className="form">
@@ -107,99 +97,112 @@ const FormContents: FunctionComponent<{}> = () => {
         }
       `}</style>
 
-      <Fieldset legend="In progress" togglable={false}>
-        <Checkbox
-          refocus
-          label="Mark card as in progress"
-          name="status.in_progress"
-        />
-      </Fieldset>
+      {watch("status.deleted") ? <p>Card is not applicable</p> : null}
 
-      <DisableProvider disable={!watch("status.in_progress")}>
-        <Fieldset legend="Heading" name="heading.enabled">
-          <Group>
-            <RadioSet
-              name="heading.type"
-              options={[
-                "describes interaction with the protoype",
-                "describes the design",
-                "describes the process",
-                "other",
-              ]}
-            />
-          </Group>
+      <DisableProvider disable={watch("status.deleted")}>
+        <Fieldset legend="In progress" togglable={false}>
           <Checkbox
-            name="heading.special"
-            label="special (wow! e.g. a nice quote)"
+            refocus
+            label="Mark card as in progress"
+            name="status.in_progress"
           />
         </Fieldset>
 
-        <Fieldset name="image.enabled" legend="Image">
-          <Group label="Medium">
-            <CheckboxSet
-              name="image.medium"
-              options={[
-                "photo",
-                "sketch",
-                "3d game",
-                "photoshopped image",
-                "collage of multiple elements",
-                "other",
-              ]}
+        <DisableProvider disable={!watch("status.in_progress")}>
+          <Fieldset legend="Heading" name="heading.enabled">
+            <Group>
+              <RadioSet
+                name="heading.type"
+                options={[
+                  "describes interaction with the protoype",
+                  "describes the design",
+                  "describes the process",
+                  "other",
+                ]}
+              />
+            </Group>
+            <Checkbox
+              name="heading.special"
+              label="special (wow! e.g. a nice quote)"
             />
-          </Group>
-          <Group label="Depiction">
-            <CheckboxSet
-              name="image.depiction"
-              options={[
-                "product",
-                "context",
-                "person/people",
-                "hands",
-                "face",
-                "screen interface",
-                "tangible interface",
-                "low fidelity",
-                "high fidelity",
-              ]}
-            />
-          </Group>
-          <Checkbox name="image.special" label="special" />
-        </Fieldset>
+          </Fieldset>
 
-        <ContextLearning i={1} />
-        <ContextLearning i={2} />
-        <ContextLearning i={3} />
+          <Fieldset name="image.enabled" legend="Image">
+            <Group label="Medium">
+              <CheckboxSet
+                name="image.medium"
+                options={[
+                  "photo",
+                  "sketch",
+                  "3d game",
+                  "photoshopped image",
+                  "collage of multiple elements",
+                  "other",
+                ]}
+              />
+            </Group>
+            <Group label="Depiction">
+              <CheckboxSet
+                name="image.depiction"
+                options={[
+                  "product",
+                  "context",
+                  "person/people",
+                  "hands",
+                  "face",
+                  "screen interface",
+                  "tangible interface",
+                  "low fidelity",
+                  "high fidelity",
+                ]}
+              />
+            </Group>
+            <Checkbox name="image.special" label="special" />
+          </Fieldset>
 
-        <Fieldset
-          name="design_learning.enabled"
-          legend="Knowledge gained about designing"
-        >
-          <Group>
-            <RadioSet
-              name="design_learning.type"
-              options={[
-                "process description",
-                "personal insight",
-                "teamwork insight",
-              ]}
-            />
-          </Group>
-          <Group>
-            <Scale
-              name="design_learning.progress"
-              label={["going bad", "going well"]}
-            />
-          </Group>
-          <Checkbox name="design_learning.special" label="special" />
-        </Fieldset>
+          <ContextLearning i={1} />
+          <ContextLearning i={2} />
+          <ContextLearning i={3} />
 
-        <CardMeta />
+          <Fieldset
+            name="design_learning.enabled"
+            legend="Knowledge gained about designing"
+          >
+            <Group>
+              <RadioSet
+                name="design_learning.type"
+                options={[
+                  "process description",
+                  "personal insight",
+                  "teamwork insight",
+                ]}
+              />
+            </Group>
+            <Group>
+              <Scale
+                name="design_learning.progress"
+                label={["going bad", "going well"]}
+              />
+            </Group>
+            <Checkbox name="design_learning.special" label="special" />
+          </Fieldset>
 
-        <Fieldset legend="Completed" togglable={false}>
-          <Checkbox label="Mark card as processed" name="status.completed" />
-        </Fieldset>
+          <Fieldset legend="Card data" togglable={false}>
+            <Date name="metadata.date" label="Date" />
+            <Text name="metadata.student_name" label="Student name" />
+            <Text name="metadata.group_number" label="Group number" />
+          </Fieldset>
+
+          <Fieldset legend="Completed" togglable={false}>
+            <Checkbox label="Mark card as processed" name="status.completed" />
+          </Fieldset>
+        </DisableProvider>
       </DisableProvider>
+
+      <Fieldset legend="Special" togglable={false}>
+        <textarea name="notes" ref={register()} />
+        <Checkbox label="Mark card as not applicable" name="status.deleted" />
+      </Fieldset>
     </div>
   )
 }

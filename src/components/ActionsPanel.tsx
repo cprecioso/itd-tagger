@@ -57,10 +57,13 @@ export const IndexBox: FunctionComponent = () => {
             background: green;
           }
 
+          .card-status.deleted {
+            background: black;
+          }
+
           .card-status.current {
-            background: blue;
+            border: 1px solid blue;
             transform: scale(2);
-            border: 1px solid white;
           }
         `}</style>
         <div
@@ -93,7 +96,7 @@ export const IndexBox: FunctionComponent = () => {
 }
 
 export const ActionsPanel: FunctionComponent = () => {
-  const { goToPrevious, goToNext } = useSelectedDocument()
+  const { goToPrevious, goToNext, currentIndex } = useSelectedDocument()
 
   React.useEffect(() => {
     const listener = (e: KeyboardEvent): void => {
@@ -139,6 +142,8 @@ export const ActionsPanel: FunctionComponent = () => {
         }
       `}</style>
 
+      <p style={{ textAlign: "center" }}>Card #{currentIndex}</p>
+      <hr />
       <button type="submit">Save [enter]</button>
       <hr />
       <button onClick={() => goToPrevious()}>Previous [j]</button>

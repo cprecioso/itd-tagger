@@ -3,13 +3,15 @@ import zip from "lodash.zip"
 import PouchDB from "pouchdb"
 import React, { FunctionComponent } from "react"
 import useSWR from "swr"
+import { CardStatusQueryResponse } from "../card-data"
 import { useSecrets } from "../hooks/secret"
 
 export const fetcher = async (caisUrl: string, oscarUrl: string) => {
   const [cais, oscar] = await Promise.all(
     [caisUrl, oscarUrl].map(async (dbUrl) =>
       sortBy(
-        (await new PouchDB(dbUrl).query("card-queries/card-status")).rows,
+        (await new PouchDB(dbUrl).query("card-queries/card-status"))
+          .rows as CardStatusQueryResponse[],
         (row) => Number.parseInt(row.id, 10)
       )
     )
@@ -51,6 +53,9 @@ export const OverviewBox: FunctionComponent = () => {
           }
           .completed {
             fill: green;
+          }
+          .deleted {
+            fill: black;
           }
         `}</style>
 
