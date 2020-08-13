@@ -96,7 +96,7 @@ export const IndexBox: FunctionComponent = () => {
 }
 
 export const ActionsPanel: FunctionComponent = () => {
-  const { goToPrevious, goToNext, currentIndex } = useSelectedDocument()
+  const { goToPrevious, goToNext, currentIndex, goTo } = useSelectedDocument()
 
   React.useEffect(() => {
     const listener = (e: KeyboardEvent): void => {
@@ -117,6 +117,15 @@ export const ActionsPanel: FunctionComponent = () => {
     document.addEventListener("keyup", listener, true)
     return () => document.removeEventListener("keyup", listener)
   }, [])
+
+  const navigateTo = () => {
+    const index = Number.parseInt(
+      prompt("Go to card", "" + currentIndex) ?? "" + currentIndex,
+      10
+    )
+    if (Number.isNaN(index)) return alert("Not valid number")
+    goTo(index)
+  }
 
   return (
     <div className="actions">
@@ -148,6 +157,7 @@ export const ActionsPanel: FunctionComponent = () => {
       <hr />
       <button onClick={() => goToPrevious()}>Previous [j]</button>
       <button onClick={() => goToNext()}>Next [k]</button>
+      <button onClick={navigateTo}>Go to card</button>
       <hr />
       <Indications />
     </div>

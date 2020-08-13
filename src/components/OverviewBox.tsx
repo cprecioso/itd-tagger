@@ -35,10 +35,21 @@ export const OverviewBox: FunctionComponent = () => {
   const width = COLUMNS * (PADDING + SIZE)
   const height = rows * (PADDING + SIZE)
 
+  const [currentSquare, setCurrentSqure] = React.useState<string | undefined>(
+    undefined
+  )
+
   return (
     <>
-      <h3>Progress</h3>
-      <svg width={width} height={height}>
+      <h3>Progress {currentSquare != null ? <>(#{currentSquare})</> : ""}</h3>
+      <svg
+        width={width}
+        height={height}
+        onMouseLeave={() => setCurrentSqure(undefined)}
+        onMouseOver={(e) =>
+          setCurrentSqure((e.target as SVGElement).dataset.id)
+        }
+      >
         <style jsx>{`
           polygon {
             stroke: white;
@@ -65,10 +76,12 @@ export const OverviewBox: FunctionComponent = () => {
           const originX = i * SIZE
           const originY = j * SIZE
 
+          const id = (cais ?? oscar)!.id
           return (
-            <React.Fragment key={(cais ?? oscar)!.id}>
+            <React.Fragment key={id}>
               {cais ? (
                 <polygon
+                  data-id={id}
                   className={cais.key}
                   points={`${originX},${originY} ${originX},${originY + SIZE} ${
                     originX + SIZE
@@ -77,6 +90,7 @@ export const OverviewBox: FunctionComponent = () => {
               ) : null}
               {oscar ? (
                 <polygon
+                  data-id={id}
                   className={oscar.key}
                   points={`${originX + SIZE},${originY + SIZE} ${originX},${
                     originY + SIZE
