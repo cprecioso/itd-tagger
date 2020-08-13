@@ -6,6 +6,14 @@ const App: FunctionComponent<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <style jsx global>{`
+        @media (prefers-color-scheme: dark) {
+          html,
+          button {
+            background-color: #181a1b;
+            color: #e8e6e3;
+          }
+        }
+
         body {
           margin: 0;
           padding: 0;
