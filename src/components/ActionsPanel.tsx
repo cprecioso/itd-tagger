@@ -102,8 +102,9 @@ export const ActionsPanel: FunctionComponent = () => {
   React.useEffect(() => {
     const listener = (e: KeyboardEvent): void => {
       if (
-        e.target instanceof HTMLInputElement &&
-        (e.target.type === "text" || e.target.type === "date")
+        (e.target instanceof HTMLInputElement &&
+        (e.target.type === "text" || e.target.type === "date")) ||
+        e.target instanceof HTMLTextAreaElement
       )
         return
       if (e.key === "j" || e.key === "J") {
