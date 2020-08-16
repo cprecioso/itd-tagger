@@ -167,6 +167,10 @@ const FormContents: FunctionComponent<{}> = () => {
             name="design_learning.enabled"
             legend="Knowledge gained about designing"
           >
+            <Checkbox
+              name="design_learning.for_prototype"
+              label="reflection on the prototype, not on prototyping"
+            />
             <Group>
               <RadioSet
                 name="design_learning.type"
