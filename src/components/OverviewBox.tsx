@@ -66,7 +66,7 @@ export const OverviewBox: FunctionComponent = () => {
             fill: green;
           }
           .deleted {
-            fill: black;
+            fill: lightgray;
           }
         `}</style>
 

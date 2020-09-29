@@ -58,7 +58,7 @@ export const IndexBox: FunctionComponent = () => {
           }
 
           .card-status.deleted {
-            background: black;
+            background: lightgray;
           }
 
           .card-status.current {
