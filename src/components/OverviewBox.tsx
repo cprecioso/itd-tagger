@@ -1,9 +1,10 @@
+import { produce } from "immer"
 import sortBy from "lodash.sortby"
 import zip from "lodash.zip"
 import PouchDB from "pouchdb"
 import React, { FunctionComponent } from "react"
 import useSWR from "swr"
-import { CardStatusQueryResponse } from "../card-data"
+import { CardDataStatus, CardStatusQueryResponse } from "../card-data"
 import { useSecrets } from "../hooks/secret"
 
 export const fetcher = async (caisUrl: string, oscarUrl: string) => {
@@ -101,6 +102,60 @@ export const OverviewBox: FunctionComponent = () => {
           )
         })}
       </svg>
+      <hr />
+      {data
+        ?.reduce(
+          (acc, [cais, oscar]) =>
+            produce(acc, (acc) => {
+              acc[0][cais?.key ?? CardDataStatus.None]++
+              acc[1][oscar?.key ?? CardDataStatus.None]++
+            }),
+          Object.freeze([
+            { completed: 0, deleted: 0, in_progress: 0, none: 0 },
+            { completed: 0, deleted: 0, in_progress: 0, none: 0 },
+          ] as Record<CardDataStatus, number>[])
+        )
+        .map((data, i) => {
+          const totalWidth = `100%`
+          const total = data.completed + data.in_progress + data.none
+
+          return (
+            <>
+              <div style={{ display: "flex", flexFlow: "row nowrap" }}>
+                <div style={{ width: "10em" }}>
+                  {i === 0 ? "Cais" : "Oscar"}
+                </div>
+              <div style={{ display: "flex", flexFlow: "row nowrap" ,maxWidth:"80vw",width:"100%"}}>
+                <div
+                  style={{
+                    backgroundColor: "lightcoral",
+                    width: `calc(${data.none / total} * ${totalWidth})`,
+                  }}
+                >
+                  Waiting: {data.none} ({((data.none / total) * 100) | 0}%)
+                </div>
+                <div
+                  style={{
+                    backgroundColor: "#ffd79c",
+                    width: `calc(${data.in_progress / total} * ${totalWidth})`,
+                  }}
+                >
+                  In progress: {data.in_progress} (
+                  {((data.in_progress / total) * 100) | 0}%)
+                </div>
+                <div
+                  style={{
+                    backgroundColor: "#74ed6f",
+                    width: `calc(${data.completed / total} * ${totalWidth})`,
+                  }}
+                >
+                  Done: {data.completed} ({((data.completed / total) * 100) | 0}
+                  %)
+                </div>
+              </div></div>
+            </>
+          )
+        })}
     </>
   )
 }
