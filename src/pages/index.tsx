@@ -14,11 +14,11 @@ const IndexPage: FunctionComponent = () => {
       `}</style>
       <h3>Launch tool</h3>
       <p>
-        <Link href="/[db]" as="/cais">
-          <button>Cais</button>
+        <Link href="/[db]" as="/rev1">
+          <button>Rev1</button>
         </Link>
-        <Link href="/[db]" as="/oscar">
-          <button>Oscar</button>
+        <Link href="/[db]" as="/rev2">
+          <button>Rev2</button>
         </Link>
       </p>
       <hr />

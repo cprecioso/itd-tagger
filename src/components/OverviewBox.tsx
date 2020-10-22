@@ -27,7 +27,7 @@ export const COLUMNS = 50
 
 export const OverviewBox: FunctionComponent = () => {
   const secrets = useSecrets()
-  const { data } = useSWR([secrets.cais, secrets.oscar], fetcher, {
+  const { data } = useSWR([secrets.rev1, secrets.rev2], fetcher, {
     refreshInterval: 5000,
   })
 
@@ -123,7 +123,7 @@ export const OverviewBox: FunctionComponent = () => {
             <>
               <div style={{ display: "flex", flexFlow: "row nowrap" }}>
                 <div style={{ width: "10em" }}>
-                  {i === 0 ? "Cais" : "Oscar"}
+                  {i === 0 ? "Rev1" : "Rev2"}
                 </div>
               <div style={{ display: "flex", flexFlow: "row nowrap" ,maxWidth:"80vw",width:"100%"}}>
                 <div

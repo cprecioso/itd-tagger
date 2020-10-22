@@ -25,7 +25,7 @@ DBContext.displayName = "DBContext"
 
 export const DBProvider: FunctionComponent = ({ children }) => {
   const router = useRouter()
-  const dbName = router.query.db as "cais" | "oscar"
+  const dbName = router.query.db as "rev1" | "rev2"
 
   const urls = useSecrets()
 

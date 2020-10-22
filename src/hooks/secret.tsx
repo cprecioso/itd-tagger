@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form"
 import useSWR from "swr"
 import { hash, secretbox } from "tweetnacl"
 
-export type SecretState = { oscar: string; cais: string }
+export type SecretState = { rev2: string; rev1: string }
 
 const SecretContext = React.createContext<SecretState>({
-  oscar: "",
-  cais: "",
+  rev2: "",
+  rev1: "",
 })
 
 const deriveKey = (password: string) => {
@@ -29,12 +29,12 @@ const openSecretBox = (key: Uint8Array, box: string, nonce: string) => {
 const getSecrets = async (password: string) => {
   const key = deriveKey(password)
   const state: SecretState = {
-    oscar: openSecretBox(
+    rev2: openSecretBox(
       key,
       process.env.NEXT_PUBLIC_REMOTE_DB_URL_OSCAR!,
       process.env.NEXT_PUBLIC_REMOTE_DB_URL_OSCAR_NONCE!
     ),
-    cais: openSecretBox(
+    rev1: openSecretBox(
       key,
       process.env.NEXT_PUBLIC_REMOTE_DB_URL_CAIS!,
       process.env.NEXT_PUBLIC_REMOTE_DB_URL_CAIS_NONCE!
