@@ -122,37 +122,46 @@ export const OverviewBox: FunctionComponent = () => {
           return (
             <>
               <div style={{ display: "flex", flexFlow: "row nowrap" }}>
-                <div style={{ width: "10em" }}>
-                  {i === 0 ? "Rev1" : "Rev2"}
-                </div>
-              <div style={{ display: "flex", flexFlow: "row nowrap" ,maxWidth:"80vw",width:"100%"}}>
+                <div style={{ width: "10em" }}>{i === 0 ? "Rev1" : "Rev2"}</div>
                 <div
                   style={{
-                    backgroundColor: "lightcoral",
-                    width: `calc(${data.none / total} * ${totalWidth})`,
+                    display: "flex",
+                    flexFlow: "row nowrap",
+                    maxWidth: "80vw",
+                    width: "100%",
                   }}
                 >
-                  Waiting: {data.none} ({((data.none / total) * 100) | 0}%)
+                  <div
+                    style={{
+                      backgroundColor: "lightcoral",
+                      width: `calc(${data.none / total} * ${totalWidth})`,
+                    }}
+                  >
+                    Waiting: {data.none} ({((data.none / total) * 100) | 0}%)
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor: "#ffd79c",
+                      width: `calc(${
+                        data.in_progress / total
+                      } * ${totalWidth})`,
+                    }}
+                  >
+                    In progress: {data.in_progress} (
+                    {((data.in_progress / total) * 100) | 0}%)
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor: "#74ed6f",
+                      width: `calc(${data.completed / total} * ${totalWidth})`,
+                    }}
+                  >
+                    Done: {data.completed} (
+                    {((data.completed / total) * 100) | 0}
+                    %)
+                  </div>
                 </div>
-                <div
-                  style={{
-                    backgroundColor: "#ffd79c",
-                    width: `calc(${data.in_progress / total} * ${totalWidth})`,
-                  }}
-                >
-                  In progress: {data.in_progress} (
-                  {((data.in_progress / total) * 100) | 0}%)
-                </div>
-                <div
-                  style={{
-                    backgroundColor: "#74ed6f",
-                    width: `calc(${data.completed / total} * ${totalWidth})`,
-                  }}
-                >
-                  Done: {data.completed} ({((data.completed / total) * 100) | 0}
-                  %)
-                </div>
-              </div></div>
+              </div>
             </>
           )
         })}

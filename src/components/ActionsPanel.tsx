@@ -103,7 +103,7 @@ export const ActionsPanel: FunctionComponent = () => {
     const listener = (e: KeyboardEvent): void => {
       if (
         (e.target instanceof HTMLInputElement &&
-        (e.target.type === "text" || e.target.type === "date")) ||
+          (e.target.type === "text" || e.target.type === "date")) ||
         e.target instanceof HTMLTextAreaElement
       )
         return
