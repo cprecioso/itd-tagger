@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import PouchDB from "pouchdb"
 import React, { FunctionComponent } from "react"
 import useSWR, { mutate } from "swr"
